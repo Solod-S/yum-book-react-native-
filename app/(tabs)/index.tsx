@@ -1,74 +1,63 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import Animated, { useSharedValue, withSpring } from "react-native-reanimated";
+import { StatusBar } from "expo-status-bar";
+import { View, Text, Image } from "react-native";
+import { useEffect } from "react";
+import { useRouter } from "expo-router";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+export default function WelcomeScreen() {
+  const ring1padding = useSharedValue(0);
+  const ring2padding = useSharedValue(0);
 
-export default function HomeScreen() {
+  const router = useRouter();
+
+  useEffect(() => {
+    setTimeout(() => {
+      ring1padding.value = 0;
+      ring2padding.value = 0;
+      ring1padding.value = withSpring(ring1padding.value + hp(4.5));
+      ring2padding.value = withSpring(ring2padding.value + hp(5));
+    }, 300);
+    setTimeout(() => {
+      router.replace("/home"); // Вызов без лишней стрелочной функции
+    }, 2500);
+    // return (cleanUp = () => {});
+  }, []);
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View className="flex-1 justify-center items-center space-y-10 bg-red-500">
+      <StatusBar style="light" />
+
+      <Animated.View
+        style={{ padding: ring1padding }}
+        className="bg-white/20 rounded-full  mb-6"
+      >
+        <Animated.View
+          className="bg-white/20 rounded-full"
+          style={{ padding: ring2padding }}
+        >
+          <Image
+            source={require("../../assets/images/welcome.png")}
+            style={{ width: hp(21), height: hp(21) }}
+          />
+        </Animated.View>
+      </Animated.View>
+      <View className="flex items-center space-y-2">
+        <Text
+          style={{ fontSize: hp(6) }}
+          className="font-bold text-white tracking-widest"
+        >
+          Yum-book
+        </Text>
+        <Text
+          style={{ fontSize: hp(2) }}
+          className="font-medium text-white tracking-widest"
+        >
+          Cook. Taste. Enjoy.
+        </Text>
+      </View>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
