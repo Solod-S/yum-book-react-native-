@@ -21,22 +21,43 @@ import axios from "axios";
 export default function HomeScreen() {
   const [activeCategory, setActiveCategory] = useState("Beef");
   const [categories, setCategories] = useState([]);
+  const [meals, setMeals] = useState([]);
+
+  const getCategories = async () => {
+    try {
+      const response = await axios.get(
+        "https://www.themealdb.com/api/json/v1/1/categories.php"
+      );
+      if (response.data?.categories) {
+        setCategories(response.data.categories);
+      }
+    } catch (error) {
+      console.log("Error in getCategories:", error);
+    }
+  };
+
+  const getMeals = async (category = "Beef") => {
+    try {
+      const response = await axios.get(
+        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
+      );
+      // console.log(`response`, response.data.meals.length);
+      if (response.data?.meals) {
+        setMeals(response.data.meals);
+      }
+    } catch (error) {
+      console.log("Error in getRecipes:", error);
+    }
+  };
+
+  const handleChangeCategory = category => {
+    getMeals(category);
+    setActiveCategory(category);
+  };
 
   useEffect(() => {
-    const getCategories = async () => {
-      try {
-        const response = await axios.get(
-          "https://www.themealdb.com/api/json/v1/1/categories.php"
-        );
-        if (response.data?.categories) {
-          setCategories(response.data.categories);
-        }
-      } catch (error) {
-        console.log("Error in getCategories:", error);
-      }
-    };
-
     getCategories();
+    getMeals();
   }, []);
 
   return (
@@ -85,18 +106,22 @@ export default function HomeScreen() {
 
             {/* Categories */}
             <View className="mb-4">
-              {categories.length > 0 && (
-                <Categories
-                  categories={categories}
-                  activeCategory={activeCategory}
-                  setActiveCategory={setActiveCategory}
-                />
-              )}
+              <Categories
+                handleChangeCategory={handleChangeCategory}
+                categories={categories}
+                activeCategory={activeCategory}
+              />
             </View>
           </>
         )}
         renderItem={null} // Оставляем пустым, так как Recipes будет рендерить свой список
-        ListFooterComponent={() => <Recipes />}
+        ListFooterComponent={() => (
+          <Recipes
+            meals={meals}
+            categories={categories}
+            handleChangeCategory={handleChangeCategory}
+          />
+        )}
         showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>
