@@ -1,15 +1,13 @@
 import React from "react";
 import { View, Text, FlatList, Pressable } from "react-native";
+import { useRouter } from "expo-router";
 import { Image } from "expo-image";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
-
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-
 import { Loading } from "./loading";
-import { useRouter } from "expo-router";
 
 export function Recipes({ categories, meals }) {
   const router = useRouter();

@@ -1,7 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-
 import Animated from "react-native-reanimated";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const CachedImage = props => {
   const [cachedSource, setCachedSource] = useState(null);

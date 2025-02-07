@@ -1,12 +1,12 @@
+import { useEffect } from "react";
+import { View, Text, Image } from "react-native";
+import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Animated, { useSharedValue, withSpring } from "react-native-reanimated";
-import { StatusBar } from "expo-status-bar";
-import { View, Text, Image } from "react-native";
-import { useEffect } from "react";
-import { useRouter } from "expo-router";
 
 export default function WelcomeScreen() {
   const ring1padding = useSharedValue(0);
@@ -22,9 +22,8 @@ export default function WelcomeScreen() {
       ring2padding.value = withSpring(ring2padding.value + hp(5));
     }, 300);
     setTimeout(() => {
-      router.replace("/home"); // Вызов без лишней стрелочной функции
+      router.replace("/home");
     }, 2500);
-    // return (cleanUp = () => {});
   }, []);
   return (
     <View className="flex-1 justify-center items-center space-y-10 bg-red-500">

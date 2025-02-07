@@ -1,8 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   View,
   Text,
+  Image,
   TextInput,
   TouchableOpacity,
   FlatList,
@@ -15,7 +16,6 @@ import {
 import axios from "axios";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Categories, Recipes } from "@/components";
-import Toast from "react-native-toast-message";
 
 export default function HomeScreen() {
   const [state, setState] = useState({
@@ -24,7 +24,6 @@ export default function HomeScreen() {
   });
 
   const [categories, setCategories] = useState([]);
-  const searchQueryRef = useRef("");
 
   const getCategories = async () => {
     try {
@@ -65,73 +64,9 @@ export default function HomeScreen() {
           activeCategory: category,
           meals,
         }));
-        searchQueryRef.current = "";
       } catch (error) {
         console.log("Error in getMeals:", error);
       }
-    }
-  };
-
-  const handleSearch = async () => {
-    const query = searchQueryRef.current.trim();
-
-    if (query.length === 0) {
-      Toast.show({
-        type: "info",
-        position: "top",
-        text1: "Enter a search query",
-        text2: "The search field cannot be empty.",
-        visibilityTime: 1500,
-        autoHide: true,
-        bottomOffset: 50,
-      });
-      return;
-    }
-
-    try {
-      const response = await axios.get(
-        `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`
-      );
-      const meals = response.data?.meals || [];
-
-      if (meals.length === 0) {
-        Toast.show({
-          type: "error",
-          position: "top",
-          text1: "No meals found",
-          text2: `No results for "${query}". Try a different search.`,
-          visibilityTime: 2000,
-          autoHide: true,
-          bottomOffset: 50,
-        });
-        return;
-      }
-
-      setState(prev => ({
-        ...prev,
-        meals,
-      }));
-
-      Toast.show({
-        type: "success",
-        position: "top",
-        text1: "Search successful",
-        text2: `${meals.length} meals found`,
-        visibilityTime: 1500,
-        autoHide: true,
-        bottomOffset: 50,
-      });
-    } catch (error) {
-      console.log("Error in handleSearch:", error);
-      Toast.show({
-        type: "error",
-        position: "top",
-        text1: "Search error",
-        text2: "Could not complete the search. Please try again later.",
-        visibilityTime: 2000,
-        autoHide: true,
-        bottomOffset: 50,
-      });
     }
   };
 
@@ -148,7 +83,18 @@ export default function HomeScreen() {
         keyExtractor={() => "dummy"}
         ListHeaderComponent={() => (
           <>
+            {/* <View className="mx-4 flex-row justify-between items-center mb-4">
+              <Image
+                style={{ height: hp(5), width: hp(5) }}
+                source={require("../../assets/images/avatar.png")}
+              />
+              <FontAwesome name="bell-o" size={hp(4)} color="gray" />
+            </View> */}
+
             <View className="mx-4 space-y-2 mt-2 mb-4">
+              {/* <Text style={{ fontSize: hp(1.7) }} className="text-neutral-600">
+                Hello, Serg
+              </Text> */}
               <Text
                 style={{ fontSize: hp(3.8) }}
                 className="font-bold text-neutral-600"
@@ -162,17 +108,10 @@ export default function HomeScreen() {
               <TextInput
                 placeholder="Search any recipe"
                 placeholderTextColor="gray"
-                defaultValue={searchQueryRef.current}
-                onChangeText={text => {
-                  searchQueryRef.current = text;
-                }}
                 style={{ fontSize: hp(1.7) }}
                 className="flex-1 text-base mb-1 pl-3 tracking-wider"
               />
-              <TouchableOpacity
-                onPress={() => handleSearch()}
-                className="bg-white rounded-full p-3"
-              >
+              <TouchableOpacity className="bg-white rounded-full p-3">
                 <FontAwesome name="search" size={hp(4)} color="gray" />
               </TouchableOpacity>
             </View>
