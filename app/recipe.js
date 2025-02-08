@@ -5,6 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { Image } from "expo-image";
 import Animated, { FadeInDown, FadeIn } from "react-native-reanimated";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Fontisto from "react-native-vector-icons/Fontisto";
 import { Loading } from "../components";
 
 import {
@@ -19,6 +20,7 @@ export default function RecipeScreen() {
   const router = useRouter();
   const item = useLocalSearchParams();
   const [favorite, setFavorite] = useState(false);
+  const [ingredientCount, setIngredientCount] = useState(0);
   const [mealData, setMealData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -40,9 +42,18 @@ export default function RecipeScreen() {
       const response = await axios.get(
         `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
       );
-      // console.log(`response`, response.data.meals[0]);
+
       if (response.data?.meals[0]) {
-        setMealData(response.data.meals[0]);
+        const meal = response.data.meals[0];
+        const ingredientCount = Object.keys(meal).filter(
+          key =>
+            key.startsWith("strIngredient") &&
+            meal[key] &&
+            meal[key].trim() !== ""
+        ).length;
+
+        setMealData(meal);
+        setIngredientCount(ingredientCount);
       }
     } catch (error) {
       console.log("Error in getRecipes:", error);
@@ -98,7 +109,7 @@ export default function RecipeScreen() {
                 color="#EF4444"
               />
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() =>
                 setFavorite(prevState => {
                   return !prevState;
@@ -112,7 +123,7 @@ export default function RecipeScreen() {
                 size={hp(3)}
                 color={favorite ? "black" : "white"}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </Animated.View>
 
           {/* meal description */}
@@ -147,7 +158,7 @@ export default function RecipeScreen() {
                   .damping(12)}
                 className="flex-row justify-around"
               >
-                <View className="flex rounded-full bg-red-400 p-2">
+                {/* <View className="flex rounded-full bg-red-400 p-2">
                   <View
                     style={{ height: hp(6.5), width: hp(6.5) }}
                     className="bg-white rounded-full flex items-center justify-center"
@@ -168,26 +179,32 @@ export default function RecipeScreen() {
                       Mins
                     </Text>
                   </View>
-                </View>
-                <View className="flex rounded-full bg-red-400 p-2">
+                </View> */}
+                <View
+                  className={`flex rounded-full p-2 ${
+                    mealData.strYoutube.length > 0
+                      ? "bg-red-400"
+                      : "bg-gray-300"
+                  }`}
+                >
                   <View
                     style={{ height: hp(6.5), width: hp(6.5) }}
                     className="bg-white rounded-full flex items-center justify-center"
                   >
-                    <FontAwesome name="signal" size={hp(4)} color="#525252" />
+                    <FontAwesome name="film" size={hp(4)} color="#525252" />
                   </View>
                   <View className="flex items-center py-2 space-y-1">
                     <Text
                       style={{ fontSize: hp(2) }}
                       className="font-bold text-neutral-700"
                     >
-                      03
+                      {mealData.strYoutube.length > 0 ? "Yes" : "No"}
                     </Text>
                     <Text
                       style={{ fontSize: hp(1.3) }}
                       className="font-bold text-neutral-700"
                     >
-                      Rating
+                      Video
                     </Text>
                   </View>
                 </View>
@@ -196,23 +213,52 @@ export default function RecipeScreen() {
                     style={{ height: hp(6.5), width: hp(6.5) }}
                     className="bg-white rounded-full flex items-center justify-center"
                   >
-                    <FontAwesome name="heart" size={hp(4)} color="#525252" />
+                    {/* <FontAwesome name="heart" size={hp(4)} color="#525252" /> */}
+                    <FontAwesome name="list-alt" size={hp(4)} color="#525252" />
                   </View>
                   <View className="flex items-center py-2 space-y-1">
                     <Text
                       style={{ fontSize: hp(2) }}
                       className="font-bold text-neutral-700"
                     >
-                      03
+                      {mealData.strCategory.length >= 6
+                        ? mealData.strCategory.slice(0, 5) + ".."
+                        : mealData.strCategory}
                     </Text>
                     <Text
                       style={{ fontSize: hp(1.3) }}
                       className="font-bold text-neutral-700"
                     >
-                      Likes
+                      Category
                     </Text>
                   </View>
                 </View>
+                <View className="flex items-center rounded-full bg-red-400 p-2">
+                  <View
+                    style={{ height: hp(6.5), width: hp(6.5) }}
+                    className="bg-white rounded-full flex items-center justify-center"
+                  >
+                    {/* <FontAwesome name="signal" size={hp(4)} color="#525252" /> */}
+                    <Fontisto name="earth" size={hp(4)} color="#525252" />
+                  </View>
+                  <View className="flex items-center py-2 space-y-1">
+                    <Text
+                      style={{ fontSize: hp(2) }}
+                      className="font-bold text-neutral-700"
+                    >
+                      {mealData.strArea.length >= 6
+                        ? mealData.strArea.slice(0, 5) + ".."
+                        : mealData.strArea}
+                    </Text>
+                    <Text
+                      style={{ fontSize: hp(1.3) }}
+                      className="font-bold text-neutral-700"
+                    >
+                      Location
+                    </Text>
+                  </View>
+                </View>
+
                 <View className="flex rounded-full bg-red-400 p-2">
                   <View
                     style={{ height: hp(6.5), width: hp(6.5) }}
@@ -225,7 +271,7 @@ export default function RecipeScreen() {
                       style={{ fontSize: hp(2) }}
                       className="font-bold text-neutral-700"
                     >
-                      03
+                      {ingredientCount}
                     </Text>
                     <Text
                       style={{ fontSize: hp(1.3) }}
