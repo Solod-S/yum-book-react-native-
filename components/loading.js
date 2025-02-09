@@ -1,10 +1,10 @@
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator } from "react-native";
 import React from "react";
 
 export function Loading(props) {
   return (
     <View className="flex-1 flex justify-center items-center">
-      <ActivityIndicator {...props} />
+      <ActivityIndicator color="red" {...props} />
     </View>
   );
 }
