@@ -7,6 +7,7 @@ import Animated, { FadeInDown, FadeIn } from "react-native-reanimated";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import { Loading } from "../components";
+import { toggleFavoriteRecipe, checkIfFavorite } from "../helpers";
 
 import {
   widthPercentageToDP as wp,
@@ -28,6 +29,7 @@ export default function RecipeScreen() {
 
   useEffect(() => {
     getMealData(item.idMeal);
+    if (user) checkIfFavorite(item.idMeal, setFavorite);
   }, []);
 
   const getYoutubeVideoId = url => {
@@ -53,7 +55,7 @@ export default function RecipeScreen() {
             meal[key] &&
             meal[key].trim() !== ""
         ).length;
-
+        // console.log(`meal`, meal);
         setMealData(meal);
         setIngredientCount(ingredientCount);
       }
@@ -113,11 +115,13 @@ export default function RecipeScreen() {
             </TouchableOpacity>
             {isAuthenticated && user && (
               <TouchableOpacity
-                onPress={() =>
-                  setFavorite(prevState => {
-                    return !prevState;
-                  })
-                }
+                onPress={async () => {
+                  await toggleFavoriteRecipe(
+                    mealData.idMeal,
+                    mealData,
+                    setFavorite
+                  );
+                }}
                 style={{ backgroundColor: "#EF4444" }}
                 className="p-2 rounded-full mr-5 "
               >

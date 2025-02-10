@@ -26,8 +26,11 @@ import { Image } from "expo-image";
 import { Menu, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/authContext";
+import { getFavoriteRecipes } from "../../helpers";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function HomeScreen() {
+  const isFocused = useIsFocused();
   const { isAuthenticated, logout, user } = useAuth();
   const router = useRouter();
   const [state, setState] = useState({
@@ -44,10 +47,26 @@ export default function HomeScreen() {
         "https://www.themealdb.com/api/json/v1/1/categories.php"
       );
       if (response.data?.categories) {
-        setCategories(response.data.categories);
+        const favorites = {
+          idCategory: "0",
+          strCategory: "Favorites",
+          strCategoryThumb:
+            "https://res.cloudinary.com/dkef1oqnp/image/upload/v1739120920/u2fawtesaxibhioo7eun.png",
+          strCategoryDescription: "",
+        };
+        setCategories([favorites, ...response.data.categories]);
       }
     } catch (error) {
       console.log("Error in getCategories:", error);
+    }
+  };
+
+  const getFavorites = async () => {
+    try {
+      const data = await getFavoriteRecipes();
+      setState(prev => ({ activeCategory: "Favorites", meals: data }));
+    } catch (error) {
+      console.log("Error in getFavorites:", error);
     }
   };
 
@@ -67,17 +86,21 @@ export default function HomeScreen() {
   const handleChangeCategory = async category => {
     if (category !== state.activeCategory) {
       try {
-        const response = await axios.get(
-          `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
-        );
-        const meals = response.data?.meals || [];
+        if (category === "Favorites") {
+          await getFavorites();
+        } else {
+          const response = await axios.get(
+            `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
+          );
+          const meals = response.data?.meals || [];
 
-        setState(prev => ({
-          ...prev,
-          activeCategory: category,
-          meals,
-        }));
-        searchQueryRef.current = "";
+          setState(prev => ({
+            ...prev,
+            activeCategory: category,
+            meals,
+          }));
+          searchQueryRef.current = "";
+        }
       } catch (error) {
         console.log("Error in getMeals:", error);
       }
@@ -152,6 +175,10 @@ export default function HomeScreen() {
     getMeals(state.activeCategory);
   }, []);
 
+  useEffect(() => {
+    if (isFocused && state.activeCategory === "Favorites") getFavorites();
+  }, [isFocused, user]);
+
   return (
     <SafeAreaView edges={["top"]} className="flex-1">
       <StatusBar style="dark" />
@@ -161,7 +188,6 @@ export default function HomeScreen() {
         ListHeaderComponent={() => (
           <>
             {/* avatar and bell icon */}
-
             {isAuthenticated ? (
               <View className="mx-4 flex-row justify-between items-center">
                 <Text

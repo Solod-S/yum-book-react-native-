@@ -21,7 +21,19 @@ export function Recipes({ categories, meals }) {
         Recipes
       </Text>
       {categories.length <= 0 || meals.length <= 0 ? (
-        <Loading size="large" className="mt-20" />
+        // <Loading size="large" className="mt-20" />
+
+        <Animated.View
+          className="flex-1 justify-center items-center"
+          entering={FadeInDown.delay(100).duration(600).springify()}
+        >
+          <Text
+            className=" mt-12 font-semibold text-red-100"
+            style={{ fontSize: hp(3.5), textAlign: "center" }}
+          >
+            no meals
+          </Text>
+        </Animated.View>
       ) : (
         <FlatList
           data={meals}
@@ -73,7 +85,7 @@ function RecipeItem({ item, index, router }) {
         </View>
 
         <Text
-          style={{ fontSize: hp(1.5), textAlign: "center" }} // Выровняли текст по центру
+          style={{ fontSize: hp(1.5), textAlign: "center" }}
           className="font-semibold text-neutral-600 mt-2"
         >
           {item.strMeal.length > 26

@@ -37,6 +37,10 @@ export const AuthContextProvider = ({ children }) => {
     return unSub;
   }, []);
 
+  const refresh = () => {
+    setUser(prevState => prevState);
+  };
+
   const updateUserData = async id => {
     const docRef = doc(db, "users", id);
     const docSnap = await getDoc(docRef);
@@ -103,7 +107,7 @@ export const AuthContextProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, register, logout }}
+      value={{ user, isAuthenticated, login, register, logout, refresh }}
     >
       {children}
     </AuthContext.Provider>
