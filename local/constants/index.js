@@ -1,0 +1,1 @@
+export { categoriesData } from "./categories";
