@@ -46,32 +46,25 @@ export function SignIn({ setActiveTab, router }) {
     const response = await login(emailRef.current, passwordRef.current);
     setLoading(false);
     if (!response.success) {
-      // Alert.alert("Sign in", response.message);
-      Toast.show({
-        type: "error",
-        position: "top",
-        text1: "Login Failed",
-        text2: response.message,
-        visibilityTime: 2000,
-        autoHide: true,
-        topOffset: 50,
-      });
+      Alert.alert("Sign in", response.message);
+    } else {
+      router.replace("/home");
+      setTimeout(() => {
+        Toast.show({
+          type: "success",
+          position: "top",
+          text1: "Login Successful",
+          text2: "You have successfully logged in.",
+          visibilityTime: 2000,
+          autoHide: true,
+          topOffset: 50,
+        });
+      }, 500);
     }
-    router.replace("/home");
-    setTimeout(() => {
-      Toast.show({
-        type: "success",
-        position: "top",
-        text1: "Login Successful",
-        text2: "You have successfully logged in.",
-        visibilityTime: 2000,
-        autoHide: true,
-        topOffset: 50,
-      });
-    }, 500);
   };
   return (
     <CustomKeyboardView>
+      <Toast />
       <StatusBar style="dark" />
       <View
         style={{ paddingTop: hp(8), paddingHorizontal: wp(5) }}

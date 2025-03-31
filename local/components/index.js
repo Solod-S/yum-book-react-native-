@@ -6,3 +6,4 @@ export { CustomMenuItems } from "./customMenuItems";
 export { Divider } from "./divider";
 export { SignIn } from "./signIn";
 export { SignUp } from "./signUp";
+export { Header } from "./header";

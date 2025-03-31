@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "yum-book",
+    "name": "Yum Book",
     "slug": "yum-book",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.solik098.yumbook"
     },
     "web": {
       "bundler": "metro",
@@ -36,6 +37,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "a6354689-e50a-4ce9-9b19-e9bde9d3fb1a"
+      }
     }
   }
 }

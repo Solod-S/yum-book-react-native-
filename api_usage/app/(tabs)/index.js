@@ -7,12 +7,26 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Animated, { useSharedValue, withSpring } from "react-native-reanimated";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function WelcomeScreen() {
   const ring1padding = useSharedValue(0);
   const ring2padding = useSharedValue(0);
 
   const router = useRouter();
+
+  const clearStorageOnFirstLaunch = async () => {
+    const firstLaunch = await AsyncStorage.getItem("firstLaunch");
+    console.log(`firstLaunch`, firstLaunch);
+    if (!firstLaunch) {
+      await AsyncStorage.clear();
+      await AsyncStorage.setItem("firstLaunch", "true");
+    }
+  };
+
+  useEffect(() => {
+    clearStorageOnFirstLaunch();
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {

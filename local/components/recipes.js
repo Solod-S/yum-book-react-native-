@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { View, Text, FlatList, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import { Image } from "expo-image";
@@ -7,9 +7,16 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { Loading } from "./loading";
+import { Header } from "./header";
 
-export function Recipes({ categories, meals }) {
+export function Recipes({
+  categories,
+  meals,
+  searchQueryRef,
+  handleSearch,
+  handleChangeCategory,
+  state,
+}) {
   const router = useRouter();
 
   return (
@@ -20,33 +27,39 @@ export function Recipes({ categories, meals }) {
       >
         Recipes
       </Text>
-      {categories.length <= 0 || meals.length <= 0 ? (
-        // <Loading size="large" className="mt-20" />
 
-        <Animated.View
-          className="flex-1 justify-center items-center"
-          entering={FadeInDown.delay(100).duration(600).springify()}
-        >
-          <Text
-            className=" mt-12 font-semibold text-red-100"
-            style={{ fontSize: hp(3.5), textAlign: "center" }}
+      <FlatList
+        ListHeaderComponent={() => (
+          <Header
+            searchQueryRef={searchQueryRef}
+            categories={categories}
+            handleSearch={handleSearch}
+            handleChangeCategory={handleChangeCategory}
+            state={state}
+          />
+        )}
+        data={meals}
+        keyExtractor={item => item.idMeal.toString()}
+        numColumns={2}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        renderItem={({ item, index }) => (
+          <RecipeItem item={item} index={index} router={router} />
+        )}
+        ListEmptyComponent={
+          <Animated.View
+            className="flex-1 justify-center items-center"
+            entering={FadeInDown.delay(100).duration(600).springify()}
           >
-            no meals
-          </Text>
-        </Animated.View>
-      ) : (
-        <FlatList
-          data={meals}
-          keyExtractor={item => item.idMeal}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 20 }}
-          renderItem={({ item, index }) => (
-            <RecipeItem item={item} index={index} router={router} />
-          )}
-          ListEmptyComponent={<Text>No recipes available</Text>}
-        />
-      )}
+            <Text
+              className=" mt-12 font-semibold text-red-100"
+              style={{ fontSize: hp(3.5), textAlign: "center" }}
+            >
+              no meals
+            </Text>
+          </Animated.View>
+        }
+      />
     </View>
   );
 }

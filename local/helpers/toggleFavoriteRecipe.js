@@ -1,6 +1,7 @@
 import { doc, setDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebaseConfig";
 import Toast from "react-native-toast-message";
+import { ToastAndroid } from "react-native";
 
 const toggleFavoriteRecipe = async (recipeId, recipeData, setIsFavorite) => {
   const user = auth.currentUser;
@@ -15,6 +16,10 @@ const toggleFavoriteRecipe = async (recipeId, recipeData, setIsFavorite) => {
     if (docSnap.exists()) {
       await deleteDoc(recipeRef);
       setIsFavorite(false);
+      ToastAndroid.show(
+        "Your recipe has been successfully removed from favorites.",
+        ToastAndroid.LONG
+      );
       // Toast.show({
       //   type: "success",
       //   position: "top",
@@ -30,6 +35,10 @@ const toggleFavoriteRecipe = async (recipeId, recipeData, setIsFavorite) => {
         createdAt: Date.now(),
       });
       setIsFavorite(true);
+      ToastAndroid.show(
+        "Your recipe has been successfully added to favorites.",
+        ToastAndroid.LONG
+      );
       // Toast.show({
       //   type: "success",
       //   position: "top",

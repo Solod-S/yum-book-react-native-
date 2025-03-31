@@ -42,15 +42,19 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const updateUserData = async id => {
-    const docRef = doc(db, "users", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      let data = docSnap.data();
-      setUser({
-        ...user,
-        username: data.username,
-        userId: data.userId,
-      });
+    try {
+      const docRef = doc(db, "users", id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        let data = docSnap.data();
+        setUser({
+          ...user,
+          username: data.username,
+          userId: data.userId,
+        });
+      }
+    } catch (error) {
+      console.log(`Error in updateUserData: `, error);
     }
   };
 

@@ -33,16 +33,16 @@ export function SignUp({ setActiveTab, router }) {
 
   const handleRegister = async () => {
     if (!emailRef.current || !passwordRef.current || !userNameRef.current) {
-      // Alert.alert("Sign up", "Please fill all the fields");
-      Toast.show({
-        type: "error",
-        position: "top",
-        text1: "Sign Up Failed",
-        text2: "Please fill all the fields",
-        visibilityTime: 2000,
-        autoHide: true,
-        topOffset: 50,
-      });
+      Alert.alert("Sign up", "Please fill all the fields");
+      // Toast.show({
+      //   type: "error",
+      //   position: "top",
+      //   text1: "Sign Up Failed",
+      //   text2: "Please fill all the fields",
+      //   visibilityTime: 2000,
+      //   autoHide: true,
+      //   topOffset: 50,
+      // });
       return;
     }
 
@@ -66,19 +66,20 @@ export function SignUp({ setActiveTab, router }) {
         autoHide: true,
         topOffset: 50,
       });
+    } else {
+      router.replace("/home");
+      setTimeout(() => {
+        Toast.show({
+          type: "success",
+          position: "top",
+          text1: "Sign Up Successful",
+          text2: "You have successfully logged in.",
+          visibilityTime: 2000,
+          autoHide: true,
+          topOffset: 50,
+        });
+      }, 500);
     }
-    router.replace("/home");
-    setTimeout(() => {
-      Toast.show({
-        type: "success",
-        position: "top",
-        text1: "Sign Up Successful",
-        text2: "You have successfully logged in.",
-        visibilityTime: 2000,
-        autoHide: true,
-        topOffset: 50,
-      });
-    }, 500);
   };
   return (
     <CustomKeyboardView>

@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import { signOut } from "firebase/auth";
+import { deleteApp } from "firebase/app";
 import { View, Text, Image } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -7,12 +9,42 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Animated, { useSharedValue, withSpring } from "react-native-reanimated";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { auth } from "../../firebaseConfig";
 
 export default function WelcomeScreen() {
   const ring1padding = useSharedValue(0);
   const ring2padding = useSharedValue(0);
 
   const router = useRouter();
+
+  const clearFirebaseData = async () => {
+    try {
+      // Удаляем приложение и разлогиневаем Firebase (очищает кэш)
+      await signOut(auth);
+      await deleteApp(auth.app);
+
+      console.log("Firebase кэш очищен");
+    } catch (error) {
+      console.error("Ошибка очистки Firebase:", error);
+    }
+  };
+
+  const clearStorageOnFirstLaunch = async () => {
+    const firstLaunch = await AsyncStorage.getItem("firstLaunch");
+
+    if (!firstLaunch) {
+      await clearFirebaseData(); // Очищаем Firebase
+      await AsyncStorage.clear(); // Очищаем AsyncStorage
+      await AsyncStorage.setItem("firstLaunch", "true");
+
+      console.log("Полный сброс данных выполнен");
+    }
+  };
+
+  // useEffect(() => {
+  //   clearStorageOnFirstLaunch();
+  // }, []);
 
   useEffect(() => {
     setTimeout(() => {

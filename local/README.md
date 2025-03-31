@@ -23,6 +23,8 @@ Key Features:
 - Step-by-Step Instructions – Detailed cooking guides with clear step-by-step directions.
 - Video Tutorials – Watch video instructions for better guidance in the cooking process.
 - Ingredient List – A complete list of ingredients to make meal preparation easier.
+- User Authentication – Create an account and log in to personalize your experience.
+- Save Favorite Recipes – Bookmark and organize your favorite recipes in your personal collection.
 
 Yum Book is the perfect companion for food lovers, making cooking simple and enjoyable!
 

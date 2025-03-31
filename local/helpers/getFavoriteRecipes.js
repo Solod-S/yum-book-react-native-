@@ -2,15 +2,15 @@ import { collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../firebaseConfig";
 
 const getFavoriteRecipes = async () => {
-  const user = auth.currentUser;
-
-  if (!user) {
-    console.log("The user is not authorized");
-    return [];
-  }
-
-  const recipesRef = collection(db, `users/${user.uid}/recipes`);
   try {
+    const user = auth.currentUser;
+
+    if (!user) {
+      console.log("The user is not authorized");
+      return [];
+    }
+
+    const recipesRef = collection(db, `users/${user.uid}/recipes`);
     const querySnapshot = await getDocs(recipesRef);
 
     const favoriteRecipes = querySnapshot.docs.map(doc => ({

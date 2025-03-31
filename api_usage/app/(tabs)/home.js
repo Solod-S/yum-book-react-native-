@@ -5,7 +5,6 @@ import {
   FontAwesome5,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-
 import {
   View,
   Text,
