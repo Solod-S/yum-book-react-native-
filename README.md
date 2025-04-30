@@ -4,8 +4,8 @@
 [![runs with Expo](https://img.shields.io/badge/Runs%20with%20Expo-000.svg?style=flat-square&logo=expo&labelColor=f3f3f3&logoColor=000020)](https://expo.dev/)
 [![runs with Nativewind](https://img.shields.io/badge/Runs%20with%20TailwindCSS-000.svg?style=flat-square&logo=tailwindcss&labelColor=f3f3f3&logoColor=06B6D4)](https://www.nativewind.dev/)
 [![runs with React Native Vector Icons](https://img.shields.io/badge/Runs%20with%20RN%20Vector%20Icons-000.svg?style=flat-square&logo=react&labelColor=f3f3f3&logoColor=61DAFB)](https://github.com/oblador/react-native-vector-icons)
-[![runs with React Native Reanimated](https://img.shields.io/badge/Runs%20with%20RN%20Reanimated-000.svg?style=flat-square&logo=react&labelColor=f3f3f3&logoColor=61DAFB)](https://github.com/software-mansion/react-native-reanimated)  
-[![runs with React Native Responsive Screen](https://img.shields.io/badge/Runs%20with%20RN%20Responsive%20Screen-000.svg?style=flat-square&logo=react&labelColor=f3f3f3&logoColor=61DAFB)](https://github.com/marudy/react-native-responsive-screen)  
+[![runs with React Native Reanimated](https://img.shields.io/badge/Runs%20with%20RN%20Reanimated-000.svg?style=flat-square&logo=react&labelColor=f3f3f3&logoColor=61DAFB)](https://github.com/software-mansion/react-native-reanimated)
+[![runs with React Native Responsive Screen](https://img.shields.io/badge/Runs%20with%20RN%20Responsive%20Screen-000.svg?style=flat-square&logo=react&labelColor=f3f3f3&logoColor=61DAFB)](https://github.com/marudy/react-native-responsive-screen)
 [![runs with React Native YouTube Iframe](https://img.shields.io/badge/Runs%20with%20RN%20YouTube%20Iframe-000.svg?style=flat-square&logo=youtube&labelColor=f3f3f3&logoColor=FF0000)](https://github.com/LonelyCpp/react-native-youtube-iframe)
 
 # Yum Book
